@@ -1,5 +1,12 @@
 let targetGrid = [],
-    playerGrid = [];
+    playerGrid = [],
+    playerGridWidth,
+    playerGridHeight,
+    playerGridX,
+    playerGridY,
+    playerCellWidth,
+    playerCellHeight,
+    position;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -15,6 +22,12 @@ function setup() {
 }
 
 function draw() {
+    playerGridX = windowWidth / 2 - (windowHeight - 15) / 8;
+    playerGridY = (windowHeight - ((windowHeight - 15) / 4 + 5)) / 2;
+    playerGridWidth = (windowHeight - 15) / 4;
+    playerGridHeight = (windowHeight - 15) / 4;
+    playerCellHeight = playerGridHeight / playerGrid.length;
+    playerCellWidth = playerGridWidth / playerGrid[0].length;
     background(255);
     drawGrid(
         targetGrid,
@@ -25,10 +38,10 @@ function draw() {
     );
     drawGrid(
         playerGrid,
-        windowWidth / 2 - (windowHeight - 15) / 8,
-        (windowHeight - ((windowHeight - 15) / 4 + 5)) / 2,
-        (windowHeight - 15) / 4,
-        (windowHeight - 15) / 4
+        playerGridX,
+        playerGridY,
+        playerGridWidth,
+        playerGridHeight
     );
 }
 
@@ -55,6 +68,21 @@ function drawGrid(grid, x, y, w, h) {
     pop();
 }
 
+function mousePressed() {
+    for (let i = 0; i < playerGrid.length; i++) {
+        for (let j = 0; j < playerGrid[i].length; j++) {
+            let element = playerGrid[i][j];
+            if (
+                playerGridX + j * playerCellWidth <= mouseX &&
+                playerGridY + i * playerCellHeight <= mouseY &&
+                playerGridX + (j + 1) * playerCellHeight >= mouseX &&
+                playerGridY + (i + 1) * playerCellWidth >= mouseY
+            ) {
+                playerGrid[i][j] = (playerGrid[i][j] + 1) % 6;
+            }
+        }
+    }
+}
 
 function getColorById(id) {
     switch (id) {
