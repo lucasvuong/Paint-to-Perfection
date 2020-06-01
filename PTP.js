@@ -6,7 +6,7 @@ let targetGrid = [],
     playerGridY,
     playerCellWidth,
     playerCellHeight,
-    position;
+    position = "1st";
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -36,13 +36,24 @@ function draw() {
         (windowHeight - 15) / 8,
         (windowHeight - 15) / 8
     );
-    drawGrid(
-        playerGrid,
-        playerGridX,
-        playerGridY,
-        playerGridWidth,
-        playerGridHeight
-    );
+    if (compare2DArrays(playerGrid, targetGrid)) {
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textSize(50);
+        text(
+            position,
+            playerGridX + playerGridWidth / 2,
+            playerGridY + playerCellHeight / 2
+        );
+    } else {
+        drawGrid(
+            playerGrid,
+            playerGridX,
+            playerGridY,
+            playerGridWidth,
+            playerGridHeight
+        );
+    }
 }
 
 function drawGrid(grid, x, y, w, h) {
@@ -82,6 +93,24 @@ function mousePressed() {
             }
         }
     }
+}
+
+function compare2DArrays(a, b) {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i].length !== b[i].length) {
+            return false;
+        }
+        for (let j = 0; j < a[i].length; j++) {
+            if (a[i][j] !== b[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 function getColorById(id) {
